@@ -1,0 +1,38 @@
+[
+    {
+      "id": 1,
+      "name": "Moniter",
+      "price": 10.99,
+      "imgUrl": "/imgs/moniter.jpg"
+    },
+    {
+      "id": 2,
+      "name": "Camera",
+      "price": 1199,
+      "imgUrl": "/imgs/camera.jpg"
+    },
+    {
+      "id": 3,
+      "name": "Chocolate",
+      "price": 1.05,
+      "imgUrl": "/imgs/chocolate.jpg"
+    },
+    {
+      "id": 4,
+      "name": "Watch",
+      "price": 14000,
+      "imgUrl": "/imgs/watch.jpg"
+    },
+    {
+      "id": 5,
+      "name": "Bycycle",
+      "price": 14000,
+      "imgUrl": "/imgs/mobile.jpg"
+    },
+    {
+      "id": 6,
+      "name": "Laptop",
+      "price": 14000,
+      "imgUrl": "/imgs/laptop.jpg"
+    }
+  ]
