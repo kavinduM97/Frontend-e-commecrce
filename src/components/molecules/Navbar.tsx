@@ -1,6 +1,6 @@
-import React, { SyntheticEvent } from "react";
+import React, { SyntheticEvent, useEffect } from "react";
 import { Nav, Navbar as NavbarBS } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import CartButton from "../atoms/CartButton";
 import styled from "styled-components";
@@ -66,7 +66,7 @@ const Right = styled.div`
 
 export function Navbar() {
   //const { openCart, cartQuantity } = useShoppingCart()
-
+  const navigate = useNavigate();
   const userLogin = useSelector<RootState, UserState>(
     (state: RootState) => state.userLogin
   );
@@ -75,7 +75,16 @@ export function Navbar() {
   const Email = userInfo ? userInfo.Email : null;
 
   const logoutHandler = () => {
-    localStorage.clear();
+    localStorage.removeItem("userInfo");
+  };
+
+  const cartHandler = () => {
+    if (userInfo) {
+      navigate("/cart");
+    } else {
+      alert("You have to login first");
+      navigate("/login");
+    }
   };
 
   return (
@@ -87,29 +96,28 @@ export function Navbar() {
               Home{" "}
             </Nav.Link>
 
-            <Nav.Link to="/cart" as={NavLink}>
-              Cart{" "}
-            </Nav.Link>
+            <Nav.Link onClick={cartHandler}>Cart</Nav.Link>
           </Nav>
           <SerarchIcon />
         </Left>
         <Center>
-          <Logo>storeLK.</Logo>
+          {" "}
+          <Nav.Link to="/" as={NavLink}>
+            <Logo>storeLK.</Logo>
+          </Nav.Link>
         </Center>
         <Right>
           <Nav>
             {Email ? (
               <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>
             ) : (
-              <Nav>
-                <Nav.Link to="/login" as={NavLink}>
-                  Login{" "}
-                </Nav.Link>
-                <Nav.Link to="/signup" as={NavLink}>
-                  SignUp{" "}
-                </Nav.Link>
-              </Nav>
+              <Nav.Link to="/login" as={NavLink}>
+                Login{" "}
+              </Nav.Link>
             )}
+            <Nav.Link to="/signup" as={NavLink}>
+              SignUp{" "}
+            </Nav.Link>
           </Nav>
           <CartButton></CartButton>
         </Right>

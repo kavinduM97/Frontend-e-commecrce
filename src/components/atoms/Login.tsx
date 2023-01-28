@@ -21,13 +21,15 @@ const Login = () => {
   useEffect(() => {
     if (userInfo !== undefined && userInfo.Email) {
       navigate("/");
+    } else {
     }
   }, [userInfo, navigate]);
-  console.log(userLogin);
+
   const submitHandler = async (e: SyntheticEvent) => {
     e.preventDefault();
     dispatch(login(email, password));
   };
+
   return (
     <FormContainer>
       <h1>Login</h1>

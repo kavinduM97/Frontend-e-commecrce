@@ -21,6 +21,8 @@ type CartItemProps = {
   total: any;
   productCount: any;
   setProductCount: any;
+  setcartProductList: any;
+  cartProductList: any;
 };
 
 export default function CartItem({
@@ -30,8 +32,16 @@ export default function CartItem({
   total,
   productCount,
   setProductCount,
+  setcartProductList,
+  cartProductList,
 }: CartItemProps) {
   const navigate = useNavigate();
+  const userLogin = useSelector<RootState, UserState>(
+    (state: RootState) => state.userLogin
+  );
+
+  const { userInfo } = userLogin;
+  const Email = userInfo ? userInfo.Email : null;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.checked) {
@@ -39,16 +49,22 @@ export default function CartItem({
       let count = productCount + item.quantity;
       setTotal(totalPrice);
       setProductCount(count);
+      setcartProductList([...cartProductList, item.cartId]);
     } else {
       let totalPrice = total - item.totalPrice;
       let count = productCount - item.quantity;
+      let itemId = item.cartId;
       setTotal(totalPrice);
       setProductCount(count);
+      //remove item when unchecked
+      var index = cartProductList.indexOf(itemId);
+      cartProductList.splice(index, 1);
+      setcartProductList(cartProductList);
     }
   };
 
   const removeFromCart = () => {
-    var userEmail = "user@example.com";
+    var userEmail = Email;
 
     axios
       .delete(
