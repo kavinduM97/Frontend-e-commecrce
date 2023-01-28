@@ -1,6 +1,6 @@
-import React, { SyntheticEvent } from "react";
+import React, { SyntheticEvent, useEffect } from "react";
 import { Nav, Navbar as NavbarBS } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 
 import CartButton from "../atoms/CartButton";
 import styled from "styled-components";
@@ -66,7 +66,7 @@ const Right = styled.div`
 
 export function Navbar() {
   //const { openCart, cartQuantity } = useShoppingCart()
-
+  const navigate = useNavigate();
   const userLogin = useSelector<RootState, UserState>(
     (state: RootState) => state.userLogin
   );
@@ -75,7 +75,7 @@ export function Navbar() {
   const Email = userInfo ? userInfo.Email : null;
 
   const logoutHandler = () => {
-    localStorage.clear();
+    localStorage.removeItem("userInfo");
   };
 
   return (
