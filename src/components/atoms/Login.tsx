@@ -21,6 +21,7 @@ const Login = () => {
   useEffect(() => {
     if (userInfo !== undefined && userInfo.Email) {
       navigate("/");
+    } else {
     }
   }, [userInfo, navigate]);
 

@@ -2,6 +2,7 @@ import axios from "axios";
 import { useEffect, useState } from "react";
 import { Col, Row, Stack } from "react-bootstrap";
 import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CartItems from "../components/atoms/CartItems";
 import { UserState } from "../reducers/userReducers";
@@ -128,21 +129,27 @@ export function Cart() {
 
   const { userInfo } = userLogin;
   const Email = userInfo ? userInfo.Email : null;
-
+  const navigate = useNavigate();
   let userEmail = Email;
-
-  useEffect(() => {
-    axios
-      .get(`https://localhost:7075/api/Order/GetAllProductsInCart/${userEmail}`)
-      .then((res) => {
-        let products;
-        products = res.data;
-        setDataSet([...products]);
-      })
-      .catch((err) => {
-        alert(err.message);
-      });
-  }, []);
+  if (!userEmail) {
+    alert("You have to login first");
+    navigate("/login");
+  } else {
+    useEffect(() => {
+      axios
+        .get(
+          `https://localhost:7075/api/Order/GetAllProductsInCart/${userEmail}`
+        )
+        .then((res) => {
+          let products;
+          products = res.data;
+          setDataSet([...products]);
+        })
+        .catch((err) => {
+          alert(err.message);
+        });
+    }, []);
+  }
 
   return (
     <div>

@@ -66,6 +66,8 @@ export const login =
             ? (error as any).response.data.message
             : (error as any).message,
       });
+
+      alert("login failed");
     }
   };
 

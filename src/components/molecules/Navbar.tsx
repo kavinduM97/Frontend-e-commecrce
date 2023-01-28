@@ -78,6 +78,15 @@ export function Navbar() {
     localStorage.removeItem("userInfo");
   };
 
+  const cartHandler = () => {
+    if (userInfo) {
+      navigate("/cart");
+    } else {
+      alert("You have to login first");
+      navigate("/login");
+    }
+  };
+
   return (
     <Container className="bg-white shadow-sm mb-5">
       <Wrapper>
@@ -87,9 +96,7 @@ export function Navbar() {
               Home{" "}
             </Nav.Link>
 
-            <Nav.Link to="/cart" as={NavLink}>
-              Cart{" "}
-            </Nav.Link>
+            <Nav.Link onClick={cartHandler}>Cart</Nav.Link>
           </Nav>
           <SerarchIcon />
         </Left>
