@@ -1,11 +1,13 @@
-import axios from "axios"
-import { useState } from "react"
-import { Button, Card } from "react-bootstrap"
-import { Link, useNavigate } from "react-router-dom"
-import styled from "styled-components"
+import axios from "axios";
+import { useState } from "react";
+import { Button, Card } from "react-bootstrap";
+import { useSelector } from "react-redux";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import { UserState } from "../../reducers/userReducers";
+import { RootState } from "../../store";
 
-import { formatCurrency } from "../../utilities/formatCurrency"
-
+import { formatCurrency } from "../../utilities/formatCurrency";
 
 // type SingleProductProps ={
 //     id:number
@@ -15,16 +17,15 @@ import { formatCurrency } from "../../utilities/formatCurrency"
 // }
 
 type ProductProps = {
-
-    dataSet:{
-        productId:number
-        description: string
-        name: string       
-        stock:number       
-        imgUrl:string
-        price:number
-}
-}
+  dataSet: {
+    productId: number;
+    description: string;
+    name: string;
+    stock: number;
+    imgUrl: string;
+    price: number;
+  };
+};
 const Container = styled.div``;
 
 const Wrapper = styled.div`
@@ -47,7 +48,6 @@ const Image = styled.img`
   width: 100%;
   height: 70vh;
   object-fit: cover;
-  
 `;
 
 const InfoContainer = styled.div`
@@ -70,60 +70,93 @@ const Desc = styled.p`
 
 const Price = styled.span`
   font-weight: 100;
-  font-size: 40px; 
+  font-size: 40px;
 `;
 
-export function SingleProduct({dataSet} : ProductProps){
-    
+export function SingleProduct({ dataSet }: ProductProps) {
+  //const quantity = getItemQuantity(dataSet.productId)
 
-      //const quantity = getItemQuantity(dataSet.productId)
+  const [quantity, setQuantity] = useState(0);
+  const navigate = useNavigate();
+  const userLogin = useSelector<RootState, UserState>(
+    (state: RootState) => state.userLogin
+  );
 
+  const { userInfo } = userLogin;
+  const Email = userInfo ? userInfo.Email : null;
+  const increaseOrder = () => {
+    setQuantity(quantity + 1);
+  };
 
-      const [quantity,setQuantity] = useState(0);
-        const navigate = useNavigate();
+  const decreaseOrder = () => {
+    setQuantity(quantity - 1);
+  };
+  const buyNow = () => {
+    if (quantity == 0) {
+      alert("Please add a quantity");
+    }
+    var userEmail = Email;
 
-        const increaseOrder = () => {
-          setQuantity(quantity+1)
+    //var userEmail = Cookies.get('user_email')
+
+    if (userEmail == null) {
+      alert("You need to login first");
+      navigate("/Login");
+    }
+
+    axios
+      .post(
+        `https://localhost:7075/api/Order/PlaceOrder/${dataSet.productId}`,
+        {
+          email: `${userEmail}`,
+          quantity: `${quantity}`,
         }
+      )
+      .then((res) => {
+        let temp = res.data.state;
 
-        const decreaseOrder = () => {
-          setQuantity(quantity-1)
-      }
+        if (temp == true) {
+          alert("order placed successfully");
+          navigate("/");
+        } else {
+          alert("order placed Faild");
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const addToCart = () => {
+    var userEmail = "user@example.com";
 
-const addToCart = () => {
+    if (userEmail == "") {
+      alert("You need to login first");
+      navigate("/Login");
+    } else if (quantity == 0) {
+      alert("Add more product");
+    } else {
+      axios
+        .post(
+          `https://localhost:7075/api/Order/AddToCart/${dataSet.productId}/${userEmail}/${quantity}`
+        )
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
 
-  var userEmail = "user@example.com"
-
-  if(userEmail == ""){
-
-      alert('You need to login first')
-      navigate('/Login');
-
-  }else if(quantity == 0)
-  {
-      alert('Add more product')
-
-  }else{
-          
-      axios.post(`https://localhost:7075/api/Order/AddToCart/${dataSet.productId}/${userEmail}/${quantity}`)
-          .then(function (response) {
-              console.log(response);
-           })
-          .catch(function (error) {
-              console.log(error);
-           });
-
-           alert('Product added to cart successfully')
-           navigate('/cart')
- }
-}
-    return (
-        <Card>
-        <Container>
-     
+      alert("Product added to cart successfully");
+      navigate("/cart");
+    }
+  };
+  return (
+    <Card>
+      <Container>
         <Wrapper>
           <ImgContainer>
-            <Image src='' />
+            <Image src="" />
           </ImgContainer>
           <InfoContainer>
             <Title>{dataSet.name}</Title>
@@ -135,65 +168,63 @@ const addToCart = () => {
               condimentum ac, volutpat ornare.
             </Desc>
             <Price>{formatCurrency(dataSet.price)}</Price>
-          
-            
-                   <div className="mt-auto">
 
-                   <div className="d-grid gap-2">
-                   <div
-                className="d-flex align-items-center flex-column"
-                style={{ gap: ".5rem" }}
-              >
+            <div className="mt-auto">
+              <div className="d-grid gap-2">
                 <div
-                  className="d-flex align-items-center justify-content-center"
+                  className="d-flex align-items-center flex-column"
                   style={{ gap: ".5rem" }}
                 >
-                  {/* <Button variant="warning">-</Button> */}
-                  {quantity<=0 ?
-                                    <div>                                       
-                                        <Button variant="warning" disabled>-</Button>
-                                    </div>
-                                    :
-                                    <div>
-                                        <Button variant="warning" onClick={decreaseOrder}>-</Button>                                        
-                           </div>}
-                  <div>
-                    <span className="fs-3">{quantity}</span> in cart
+                  <div
+                    className="d-flex align-items-center justify-content-center"
+                    style={{ gap: ".5rem" }}
+                  >
+                    {/* <Button variant="warning">-</Button> */}
+                    {quantity <= 0 ? (
+                      <div>
+                        <Button variant="warning" disabled>
+                          -
+                        </Button>
+                      </div>
+                    ) : (
+                      <div>
+                        <Button variant="warning" onClick={decreaseOrder}>
+                          -
+                        </Button>
+                      </div>
+                    )}
+                    <div>
+                      <span className="fs-3">{quantity}</span> in cart
+                    </div>
+                    {/* <Button variant="warning" >+</Button> */}
+                    {quantity >= dataSet.stock ? (
+                      <div>
+                        <Button variant="warning" disabled>
+                          +
+                        </Button>
+                      </div>
+                    ) : (
+                      <div>
+                        <Button variant="warning" onClick={increaseOrder}>
+                          +
+                        </Button>
+                      </div>
+                    )}
                   </div>
-                  {/* <Button variant="warning" >+</Button> */}
-                  {quantity>=dataSet.stock ?
-                                    <div>                                                                              
-                                        <Button variant="warning" disabled>+</Button>
-                                    </div>
-                                    :
-                                    <div>
-                                        <Button variant="warning" onClick={increaseOrder}>+</Button>                                        
-                          </div>}
                 </div>
-       
+
+                <Button onClick={buyNow} className="w-100" variant="success">
+                  Buy Now
+                </Button>
+
+                <Button className="w-100" onClick={addToCart}>
+                  Add To Cart
+                </Button>
               </div>
-                   <Link 
-                        
-                        role="button"
-                        to="/cart"
-                        > 
-                   <Button className="w-100" variant="success" >
-                 Buy Now
-              </Button></Link>
-            
-              <Button className="w-100"  onClick={addToCart}>
-               Add To Cart
-              </Button>
-       
-   
-               
-            
-             </div>
-            
-          </div>
-           
+            </div>
           </InfoContainer>
         </Wrapper>
-    
-      </Container></Card>)
+      </Container>
+    </Card>
+  );
 }

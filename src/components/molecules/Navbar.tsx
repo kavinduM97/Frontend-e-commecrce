@@ -101,22 +101,23 @@ export function Navbar() {
           <SerarchIcon />
         </Left>
         <Center>
-          <Logo>storeLK.</Logo>
+          {" "}
+          <Nav.Link to="/" as={NavLink}>
+            <Logo>storeLK.</Logo>
+          </Nav.Link>
         </Center>
         <Right>
           <Nav>
             {Email ? (
               <Nav.Link onClick={logoutHandler}>Logout</Nav.Link>
             ) : (
-              <Nav>
-                <Nav.Link to="/login" as={NavLink}>
-                  Login{" "}
-                </Nav.Link>
-                <Nav.Link to="/signup" as={NavLink}>
-                  SignUp{" "}
-                </Nav.Link>
-              </Nav>
+              <Nav.Link to="/login" as={NavLink}>
+                Login{" "}
+              </Nav.Link>
             )}
+            <Nav.Link to="/signup" as={NavLink}>
+              SignUp{" "}
+            </Nav.Link>
           </Nav>
           <CartButton></CartButton>
         </Right>

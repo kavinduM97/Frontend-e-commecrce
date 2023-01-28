@@ -1,8 +1,8 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Col, Row, Stack } from "react-bootstrap";
+import { Col, Nav, Row, Stack } from "react-bootstrap";
 import { useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import CartItems from "../components/atoms/CartItems";
 import { UserState } from "../reducers/userReducers";
@@ -122,6 +122,7 @@ export function Cart() {
   const [total, setTotal] = useState<any>(0);
   const [productCount, setProductCount] = useState<any>(0);
   const [dataSet, setDataSet] = useState<any[]>([]);
+  const [cartProductList, setcartProductList] = useState<any[]>([]); //to colect checked product ids
 
   const userLogin = useSelector<RootState, UserState>(
     (state: RootState) => state.userLogin
@@ -131,6 +132,36 @@ export function Cart() {
   const Email = userInfo ? userInfo.Email : null;
   const navigate = useNavigate();
   let userEmail = Email;
+  //console.log(userEmail);
+
+  const handleChange = () => {
+    //var userEmail = Cookies.get('user_email')
+
+    axios
+      .post(
+        `https://localhost:7075/api/Order/placeorderbyCart/${userEmail}`,
+        cartProductList
+      )
+      .then((res) => {
+        //console.log("nbot");
+
+        let state = res.data.state;
+
+        if (state === true) {
+          alert("order placed successfully");
+          navigate("/");
+        } else {
+          alert("order placed Faild");
+          //console.log("dsfdf");
+          navigate("/");
+        }
+      })
+      .catch((err) => {
+        alert("order placed Faild");
+        console.log("dsfdf");
+        navigate("/");
+      });
+  };
   if (!userEmail) {
     alert("You have to login first");
     navigate("/login");
@@ -146,7 +177,7 @@ export function Cart() {
           setDataSet([...products]);
         })
         .catch((err) => {
-          alert(err.message);
+          alert("No cart items yet..");
         });
     }, []);
   }
@@ -155,9 +186,12 @@ export function Cart() {
     <div>
       <Container>
         <Wrapper>
-          <Title>{Email}</Title>
+          <Title>Cart of {Email}</Title>
           <Top>
-            <TopButton>CONTINUE SHOPPING</TopButton>
+            {" "}
+            <Nav.Link to="/" as={NavLink}>
+              <TopButton>CONTINUE SHOPPING</TopButton>
+            </Nav.Link>
           </Top>
           <Bottom>
             <Info>
@@ -172,6 +206,8 @@ export function Cart() {
                         total={total}
                         productCount={productCount}
                         setProductCount={setProductCount}
+                        setcartProductList={setcartProductList}
+                        cartProductList={cartProductList}
                       />
                     </Row>
                   ))}
@@ -187,7 +223,10 @@ export function Cart() {
                 {formatCurrency(total)}
               </div>
 
-              <TopButton style={{ width: "100%", marginTop: "30px" }}>
+              <TopButton
+                onClick={handleChange}
+                style={{ width: "100%", marginTop: "30px" }}
+              >
                 CHECKOUT NOW
               </TopButton>
             </Summary>
