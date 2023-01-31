@@ -1,6 +1,6 @@
 import { SyntheticEvent, useState, useEffect } from "react";
 import { Form, Button } from "react-bootstrap";
-import FormContainer from "./FormContainer";
+import FormContainer from "../atoms/FormContainer";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "../../actions/userAction";
@@ -8,6 +8,7 @@ import { UserState } from "../../reducers/userReducers";
 import { RootState } from "../../store";
 import { ThunkDispatch } from "redux-thunk";
 import { AnyAction } from "redux";
+import AuthButton from "../atoms/authButton";
 
 const Login = () => {
   const [email, setEmail] = useState("");
@@ -54,9 +55,15 @@ const Login = () => {
           />
         </Form.Group>
 
-        <Button variant="primary" type="submit" className="my-3">
+        {/* <Button variant="primary" type="submit" className="my-3">
           Login
-        </Button>
+        </Button> */}
+
+        <AuthButton
+          buttonName="Login"
+          style={{ backgroundColor: "green", color: "white" }}
+          type="submit"
+        />
       </Form>
     </FormContainer>
   );

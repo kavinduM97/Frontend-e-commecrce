@@ -48,9 +48,9 @@ export const login =
           return response.data.detail;
         });
 
-      console.log(response, "++++++++++++++++++++++");
+      alert("Use logged successfully");
 
-      const userData = { Email: response.email, Password: response.password };
+      const userData = { Email: response.email, Token: response.token };
 
       dispatch({
         type: USER_LOGIN_SUCCESS,

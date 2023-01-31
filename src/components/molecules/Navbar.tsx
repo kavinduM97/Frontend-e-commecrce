@@ -11,7 +11,7 @@ import { UserState } from "../../reducers/userReducers";
 import { logout } from "../../actions/userAction";
 
 const Container = styled.div`
-  height: 80px;
+  height: 90px;
 
   @media (max-width: 768px) {
     height: auto;
@@ -119,12 +119,11 @@ export function Navbar() {
               SignUp{" "}
             </Nav.Link>
           </Nav>
-          <CartButton></CartButton>
+          <Nav.Link onClick={cartHandler}>
+            <CartButton />
+          </Nav.Link>
         </Right>
       </Wrapper>
     </Container>
   );
-}
-function dispatch(arg0: any) {
-  throw new Error("Function not implemented.");
 }

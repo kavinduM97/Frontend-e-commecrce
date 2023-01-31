@@ -1,18 +1,14 @@
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { Col, Row } from "react-bootstrap";
 import { useParams } from "react-router-dom";
-import { SingleProduct } from "../components/Organisms/SingleProduct";
-import AllProducts from "../data/items.json";
+import { Summary } from "../components/atoms/Summary";
 
-export const Product = () => {
-  //const filteredItem = AllProducts.filter((item) => item.id === 2)[0];
+export function OrderSummery() {
   let id = useParams();
+  let productId = Number(id["productId"]);
+  let quantity = Number(id["quantity"]);
 
   const [dataSet, setProduct] = useState<any>({});
-
-  let productId = Number(id["productId"]);
-
   useEffect(() => {
     axios
       .get(`https://localhost:7075/api/Product/${productId}`)
@@ -25,13 +21,9 @@ export const Product = () => {
         alert(err.message);
       });
   }, []);
-
-  //console.log(dataSet)
   return (
     <>
-      <Row>
-        <SingleProduct dataSet={dataSet} />
-      </Row>
+      <Summary dataSet={dataSet} quantity={quantity} />
     </>
   );
-};
+}
