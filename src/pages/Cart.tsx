@@ -23,7 +23,7 @@ const Wrapper = styled.div`
   }
 `;
 
-const Title = styled.h1`
+const Title = styled.h2`
   font-weight: 400;
   text-align: center;
 
@@ -46,7 +46,6 @@ const Top = styled.div`
 const TopButton = styled.button`
   font-weight: 600;
   cursor: pointer;
-
   padding: 10px;
 
   @media (max-width: 768px) {
@@ -57,6 +56,7 @@ const TopButton = styled.button`
 
 const Bottom = styled.div`
   display: flex;
+
   justify-content: space-between;
 
   @media (max-width: 768px) {
@@ -66,7 +66,9 @@ const Bottom = styled.div`
 
 const Info = styled.div`
   flex: 3;
-
+  border: 0.5px solid lightgray;
+  border-radius: 10px;
+  background-color: #f2cd5c;
   @media (max-width: 768px) {
     width: 100%;
   }
@@ -74,6 +76,7 @@ const Info = styled.div`
 
 const Product = styled.div`
   font-weight: 600;
+  padding-left: 10px;
   display: flex;
   justify-content: space-between;
   padding-right: 30px;
@@ -91,6 +94,7 @@ const Hr = styled.hr`
 
 const Summary = styled.div`
   flex: 1;
+  background-color: #f2921d;
   border: 0.5px solid lightgray;
   border-radius: 10px;
   padding: 20px;
@@ -196,7 +200,7 @@ export function Cart() {
           <Bottom>
             <Info>
               <Product>
-                <Stack gap={3}>
+                <Stack gap={2}>
                   {dataSet.map((item, index) => (
                     <Row key={item.id} className="py-2">
                       <CartItems

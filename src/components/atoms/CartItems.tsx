@@ -72,12 +72,11 @@ export default function CartItem({
       )
       .then(function (response) {
         console.log(response);
+        alert("Item deleted from cart successfully");
       })
       .catch(function (error) {
         console.log(error);
       });
-
-    alert("Item deleted from cart successfully");
   };
 
   return (

@@ -92,43 +92,27 @@ export function SingleProduct({ dataSet }: ProductProps) {
     setQuantity(quantity - 1);
   };
   const buyNow = () => {
+    var userEmail = Email;
     if (quantity == 0) {
       alert("Please add a quantity");
     }
-    var userEmail = Email;
 
     //var userEmail = Cookies.get('user_email')
-
-    if (userEmail == null) {
+    else if (userEmail == null) {
       alert("You need to login first");
       navigate("/Login");
     }
 
-    axios
-      .post(
-        `https://localhost:7075/api/Order/PlaceOrder/${dataSet.productId}`,
-        {
-          email: `${userEmail}`,
-          quantity: `${quantity}`,
-        }
-      )
-      .then((res) => {
-        let temp = res.data.state;
-
-        if (temp == true) {
-          alert("order placed successfully");
-          navigate("/");
-        } else {
-          alert("order placed Faild");
-          navigate("/");
-        }
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+    // <Link
+    //   to={`/orderSummery/${dataSet.productId}/${quantity}/${dataSet.price}`}
+    // ></Link>;
+    else {
+      navigate(`/orderSummery/${dataSet.productId}/${quantity}`);
+    }
   };
+
   const addToCart = () => {
-    var userEmail = "user@example.com";
+    var userEmail = Email;
 
     if (userEmail == "") {
       alert("You need to login first");
